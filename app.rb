@@ -1,4 +1,3 @@
-#encoding: utf-8
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
@@ -14,7 +13,6 @@ require 'sqlite3'
  before do
 
  	# инициализация БД
- 	
  	init_db
  end
 
@@ -28,13 +26,14 @@ require 'sqlite3'
 
  	#создает таблицу Posts
 
- 	@db.execute 'CREATE TABLE Posts
+ 	@db.execute 'create table if not exists Posts
  	(
 	 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	 	created_date DATE,
 	 	content TEXT
  	)'
  end
+
 get '/' do
 	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"			
 end
@@ -53,5 +52,9 @@ post '/new' do
 	# получаем переменную  из Post запроса
   	content = params[:content]
 
+  	if content.length <= 0
+  		@error = "Type post text"
+  		return erb :new
+  	end
   	erb "You typed #{content}"
 end
