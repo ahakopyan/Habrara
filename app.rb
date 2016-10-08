@@ -32,6 +32,16 @@ require 'sqlite3'
 	 	created_date DATE,
 	 	content TEXT
  	)'
+
+ 	#создает таблицу Posts
+
+ 	@db.execute 'create table if not exists Comments
+ 	(
+	 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	 	created_date DATE,
+	 	content TEXT,
+	 	post_id integer
+ 	)'
  end
 
 get '/' do
