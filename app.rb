@@ -33,7 +33,7 @@ require 'sqlite3'
 	 	content TEXT
  	)'
 
- 	#создает таблицу Posts
+ 	#создает таблицу Comments
 
  	@db.execute 'create table if not exists Comments
  	(
@@ -71,7 +71,7 @@ post '/new' do
   	end
 
   	# сохранение данных в БД
-  	@db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
+  	@db.execute 'insert into Posts (content,created_date) values (?, datetime())', [content]
 
   	# перенаправление на главную страницу
   	redirect to '/'
@@ -89,6 +89,9 @@ get '/details/:post_id' do
 	
 	# выбераем этот один пост в переменную @row
 	@row = results[0]
+
+	# выбераем комментарии для нашего поста
+	@comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
 
 	# возвращаем представление details.erb
 	erb :details
